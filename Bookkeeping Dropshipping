@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookkeeping for Amazon and TikTok Shops</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/@solana/web3.js/1.73.0/solana-web3.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Bookkeeping for Amazon & TikTok Shops</h1>
+        <nav>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="features">
+            <h2>Features</h2>
+            <p>Manage your Amazon and TikTok Shop transactions seamlessly using Solana protocol for fast and secure processing.</p>
+        </section>
+
+        <section id="pricing">
+            <h2>Pricing</h2>
+            <p>Flexible pricing options for your bookkeeping needs. Payments handled securely via Stripe.</p>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>Have questions? Reach out to our support team for assistance.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Bookkeeping Solutions. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-app.firebaseapp.com",
+            databaseURL: "https://your-app.firebaseio.com",
+            projectId: "your-app-id",
+            storageBucket: "your-app.appspot.com",
+            messagingSenderId: "your-messaging-sender-id",
+            appId: "your-app-id"
+        };
+        
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Example: Stripe payment integration setup
+        const stripe = Stripe('your-public-key');
+
+        function handlePayment() {
+            stripe.redirectToCheckout({
+                sessionId: 'your-session-id'
+            }).then(function (result) {
+                if (result.error) {
+                    console.error(result.error.message);
+                }
+            });
+        }
+
+        // Example: Analytics integration
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'your-google-analytics-id');
+
+        // Solana Protocol Configuration
+        const solanaWeb3 = solanaWeb3;
+
+        async function connectToSolanaWallet() {
+            if (window.solana && window.solana.isPhantom) {
+                try {
+                    const response = await window.solana.connect();
+                    console.log('Connected to wallet:', response.publicKey.toString());
+                } catch (error) {
+                    console.error('Error connecting to wallet:', error);
+                }
+            } else {
+                alert('Phantom Wallet not found. Please install it to use Solana features.');
+            }
+        }
+
+        async function sendTransaction() {
+            try {
+                const connection = new solanaWeb3.Connection(
+                    solanaWeb3.clusterApiUrl('mainnet-beta'),
+                    'confirmed'
+                );
+
+                const fromWallet = window.solana;
+                const toPublicKey = new solanaWeb3.PublicKey('recipient-public-key');
+                const amount = 1 * solanaWeb3.LAMPORTS_PER_SOL; // 1 SOL
+
+                const transaction = new solanaWeb3.Transaction().add(
+                    solanaWeb3.SystemProgram.transfer({
+                        fromPubkey: fromWallet.publicKey,
+                        toPubkey: toPublicKey,
+                        lamports: amount
+                    })
+                );
+
+                const { signature } = await window.solana.signAndSendTransaction(transaction);
+                console.log('Transaction signature:', signature);
+            } catch (error) {
+                console.error('Error sending transaction:', error);
+            }
+        }
+    </script>
+
+    <button onclick="connectToSolanaWallet()">Connect Solana Wallet</button>
+    <button onclick="sendTransaction()">Send Transaction</button>
+
+    <!-- Include Cloudflare SSL and Webtask backend via external configurations -->
+</body>
+</html>
